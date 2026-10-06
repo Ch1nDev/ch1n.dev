@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Privacy Policy — chinberclart.dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #0a0a0f;
+      --surface:  #111118;
+      --surface2: #18181f;
+      --border:   rgba(255,255,255,0.07);
+      --accent-a: #a9ffcb;
+      --accent-b: #ff6db1;
+      --text:     #f0f0f5;
+      --muted:    rgba(240,240,245,0.45);
+      --muted2:   rgba(240,240,245,0.7);
+      --radius:   20px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; }
+
+    .grad { background: linear-gradient(135deg, var(--accent-a) 0%, var(--accent-b) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ── CURSOR ── */
+    .cursor { position: fixed; width: 12px; height: 12px; background: var(--accent-a); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background 0.2s; }
+    .cursor.big { width: 44px; height: 44px; background: rgba(169,255,203,0.12); border: 1.5px solid var(--accent-a); }
+    @media (max-width: 768px) { .cursor { display: none; } body { cursor: auto; } }
+
+    /* ── GLOW BG ── */
+    .bg-glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bg-glow::before { content: ''; position: absolute; top: -20%; left: 15%; width: 700px; height: 700px; background: radial-gradient(circle, rgba(169,255,203,0.07) 0%, transparent 70%); animation: drift 14s ease-in-out infinite alternate; }
+    .bg-glow::after { content: ''; position: absolute; bottom: 10%; right: 5%; width: 550px; height: 550px; background: radial-gradient(circle, rgba(255,109,177,0.06) 0%, transparent 70%); animation: drift 20s ease-in-out infinite alternate-reverse; }
+    @keyframes drift { from { transform: translate(0,0); } to { transform: translate(35px,28px); } }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0.9rem 0.75rem 1.5rem; background: rgba(17,17,24,0.82); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); border: 1px solid var(--border); border-radius: 100px; width: min(880px, calc(100% - 2rem)); gap: 2rem; transition: border-radius 0.3s; }
+    nav.menu-open { border-radius: 20px; }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem; color: var(--text); text-decoration: none; white-space: nowrap; letter-spacing: -0.01em; }
+    .nav-links { display: flex; gap: 0.2rem; list-style: none; }
+    .nav-links a { font-size: 0.78rem; font-weight: 500; color: var(--muted); text-decoration: none; padding: 0.45rem 0.9rem; border-radius: 100px; transition: color 0.2s, background 0.2s; }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-cta-btn { background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); color: #0a0a0f; padding: 0.55rem 1.3rem; border-radius: 100px; font-size: 0.78rem; font-weight: 600; text-decoration: none; transition: opacity 0.2s; white-space: nowrap; }
+    .nav-cta-btn:hover { opacity: 0.85; }
+    .nav-hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; width: 38px; height: 38px; background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; cursor: pointer; gap: 5px; flex-shrink: 0; transition: background 0.2s; }
+    .nav-hamburger:hover { background: rgba(169,255,203,0.08); }
+    .nav-hamburger span { display: block; width: 16px; height: 1.5px; background: var(--text); border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease; transform-origin: center; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-mobile-menu { display: none; flex-direction: column; gap: 0.25rem; width: 100%; padding-top: 0; border-top: 1px solid transparent; margin-top: 0; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.3s ease, padding-top 0.3s ease, border-color 0.3s ease; }
+    .nav-mobile-menu.open { max-height: 300px; opacity: 1; padding-top: 0.75rem; border-top-color: var(--border); margin-top: 0.75rem; }
+    .nav-mobile-menu a { font-size: 0.88rem; font-weight: 500; color: var(--muted); text-decoration: none; padding: 0.65rem 0.75rem; border-radius: 12px; transition: color 0.2s, background 0.2s; }
+    .nav-mobile-menu a:hover { color: var(--text); background: var(--surface2); }
+    .nav-mobile-menu .mobile-cta { margin-top: 0.5rem; background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); color: #0a0a0f; font-weight: 600; text-align: center; border-radius: 100px; padding: 0.75rem; }
+    @media (max-width: 768px) {
+      nav { flex-wrap: wrap; gap: 0; padding: 0.75rem 0.9rem 0.75rem 1.3rem; align-items: center; }
+      .nav-links, .nav-cta-btn { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-mobile-menu { display: flex; }
+      .nav-logo { flex: 1; }
+    }
+
+    /* ── READ PROGRESS ── */
+    .read-progress { position: fixed; top: 0; left: 0; height: 2px; z-index: 500; background: linear-gradient(90deg, var(--accent-a), var(--accent-b)); width: 0%; transition: width 0.1s linear; }
+
+    /* ── HERO ── */
+    .hero { position: relative; z-index: 1; min-height: 75vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 7rem 2rem 5rem; max-width: 900px; margin: 0 auto; }
+    .hero-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem; animation: fadeUp 0.5s ease both; }
+    .hero-label::before { content: ''; display: block; width: 24px; height: 1.5px; background: linear-gradient(90deg, var(--accent-a), var(--accent-b)); border-radius: 2px; }
+    .hero h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(3rem, 8vw, 6.5rem); line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 2rem; animation: fadeUp 0.5s 0.08s ease both; }
+    .hero-intro { font-size: clamp(1rem, 1.8vw, 1.2rem); font-weight: 300; line-height: 1.75; color: var(--muted2); max-width: 56ch; animation: fadeUp 0.5s 0.16s ease both; }
+    .hero-intro strong { color: var(--text); font-weight: 500; }
+
+    /* ── TOC ── */
+    .toc { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 2rem 3rem; }
+    .toc-inner { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .toc-label { font-family: 'Syne', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); width: 100%; margin-bottom: 0.4rem; }
+    .toc-link { font-size: 0.75rem; font-weight: 500; color: var(--muted2); text-decoration: none; background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; padding: 0.3rem 0.8rem; transition: color 0.2s, border-color 0.2s; }
+    .toc-link:hover { color: var(--accent-a); border-color: rgba(169,255,203,0.3); }
+
+    /* ── ARTICLE ── */
+    .article { position: relative; z-index: 1; max-width: 740px; margin: 0 auto; padding: 0 2rem 8rem; }
+
+    /* ── SECTION DIVIDER ── */
+    .section-divider { display: flex; align-items: center; gap: 1rem; margin: 5rem 0 3rem; }
+    .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+    .section-divider-label { font-family: 'Syne', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+
+    /* ── PROSE ── */
+    .prose h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 1.3rem; color: var(--text); }
+    .prose p { font-size: 1.05rem; font-weight: 300; line-height: 1.85; color: var(--muted2); margin-bottom: 1.5rem; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose p strong { color: var(--text); font-weight: 500; }
+    .prose p em { font-style: italic; color: var(--text); }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote { border-left: 3px solid; border-image: linear-gradient(180deg, var(--accent-a), var(--accent-b)) 1; padding: 1.5rem 0 1.5rem 2rem; margin: 3rem 0; }
+    .pull-quote p { font-family: 'Syne', sans-serif; font-size: clamp(1.1rem, 2vw, 1.45rem) !important; font-weight: 600 !important; color: var(--text) !important; line-height: 1.45 !important; margin-bottom: 0 !important; letter-spacing: -0.01em; }
+
+    /* ── CALLOUT ── */
+    .callout { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.8rem 2rem; margin: 2.5rem 0; position: relative; overflow: hidden; }
+    .callout::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-a), var(--accent-b)); }
+    .callout.warn::before { background: linear-gradient(90deg, #ffd97a, #ff6db1); }
+    .callout-label { font-family: 'Syne', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-a); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+    .callout.warn .callout-label { color: #ffd97a; }
+    .callout p { font-size: 0.92rem !important; margin-bottom: 0.7rem !important; color: var(--muted2) !important; }
+    .callout p:last-child { margin-bottom: 0 !important; }
+    .callout p strong { color: var(--text) !important; }
+
+    /* ── POSITIONS ── */
+    .positions { display: flex; flex-direction: column; gap: 1px; margin: 2.5rem 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+    .position-item { background: var(--surface); padding: 1.4rem 1.8rem; display: flex; gap: 1.2rem; align-items: flex-start; transition: background 0.2s; }
+    .position-item:hover { background: var(--surface2); }
+    .position-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .position-icon.green  { background: rgba(169,255,203,0.1); border: 1px solid rgba(169,255,203,0.2); }
+    .position-icon.pink   { background: rgba(255,109,177,0.1); border: 1px solid rgba(255,109,177,0.2); }
+    .position-icon.amber  { background: rgba(255,185,100,0.1); border: 1px solid rgba(255,185,100,0.2); }
+    .position-icon.blue   { background: rgba(130,170,255,0.1); border: 1px solid rgba(130,170,255,0.2); }
+    .position-icon.purple { background: rgba(180,142,255,0.1); border: 1px solid rgba(180,142,255,0.2); }
+    .position-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.35rem; color: var(--text); }
+    .position-text { font-size: 0.82rem; font-weight: 300; line-height: 1.65; color: var(--muted2); }
+
+    /* ── USE GRID ── */
+    .use-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; }
+    .use-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+    .use-card-header { font-family: 'Syne', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-a); margin-bottom: 1rem; }
+    .use-card-header.pink { color: var(--accent-b); }
+    .use-card-header.amber { color: #ffd97a; }
+    .use-card-header.purple { color: #b48eff; }
+    .use-item { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.8rem; font-weight: 300; color: var(--muted2); line-height: 1.55; padding: 0.4rem 0; border-bottom: 1px solid var(--border); }
+    .use-item:last-child { border-bottom: none; }
+    .use-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-a); flex-shrink: 0; margin-top: 0.42rem; }
+    .use-dot.dim { background: var(--muted); }
+    .use-dot.pink { background: var(--accent-b); }
+    .use-dot.amber { background: #ffd97a; }
+
+    /* ── COOKIE TABLE ── */
+    .cookie-table { width: 100%; border-collapse: collapse; margin: 2rem 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); font-size: 0.8rem; }
+    .cookie-table th { background: var(--surface2); padding: 0.9rem 1.2rem; text-align: left; font-family: 'Syne', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .cookie-table td { background: var(--surface); padding: 0.9rem 1.2rem; color: var(--muted2); border-bottom: 1px solid var(--border); line-height: 1.5; vertical-align: top; }
+    .cookie-table tr:last-child td { border-bottom: none; }
+    .cookie-table tr:hover td { background: var(--surface2); }
+    .cookie-table td strong { color: var(--text); font-weight: 500; display: block; margin-bottom: 0.2rem; }
+    .cookie-tag { display: inline-flex; align-items: center; font-family: 'Syne', sans-serif; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.18rem 0.5rem; border-radius: 100px; border: 1px solid; }
+    .tag-essential { color: var(--accent-a); border-color: rgba(169,255,203,0.3); background: rgba(169,255,203,0.07); }
+    .tag-optional  { color: #ffd97a;         border-color: rgba(255,217,122,0.3); background: rgba(255,217,122,0.07); }
+    .tag-third     { color: var(--accent-b);  border-color: rgba(255,109,177,0.3);  background: rgba(255,109,177,0.07); }
+
+    /* ── CLOSING ── */
+    .closing { background: var(--surface); border: 1px solid var(--border); border-radius: calc(var(--radius) * 1.5); padding: 3.5rem; text-align: center; position: relative; overflow: hidden; margin: 4rem 0; }
+    .closing::before { content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(169,255,203,0.07) 0%, rgba(255,109,177,0.05) 50%, transparent 70%); pointer-events: none; }
+    .closing-icon { font-size: 2.5rem; display: block; margin-bottom: 1.2rem; }
+    .closing h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .closing p { font-size: 1rem; font-weight: 300; line-height: 1.8; color: var(--muted2); max-width: 46ch; margin: 0 auto; }
+    .closing p strong { color: var(--text); font-weight: 500; }
+
+    .last-updated { text-align: center; font-size: 0.72rem; color: var(--muted); margin-top: 3rem; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-children > * { opacity: 0; transform: translateY(14px); transition: opacity 0.45s ease, transform 0.45s ease; }
+    .reveal-children.visible > *:nth-child(1) { opacity:1;transform:none;transition-delay:0s; }
+    .reveal-children.visible > *:nth-child(2) { opacity:1;transform:none;transition-delay:.08s; }
+    .reveal-children.visible > *:nth-child(3) { opacity:1;transform:none;transition-delay:.16s; }
+    .reveal-children.visible > *:nth-child(4) { opacity:1;transform:none;transition-delay:.24s; }
+    .reveal-children.visible > *:nth-child(5) { opacity:1;transform:none;transition-delay:.32s; }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:none;} }
+
+    @media (max-width: 600px) {
+      .use-grid { grid-template-columns: 1fr; }
+      .cookie-table { font-size: 0.72rem; }
+      .cookie-table th, .cookie-table td { padding: 0.7rem 0.8rem; }
+      .closing { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="read-progress" id="read-progress"></div>
+  <div class="cursor" id="cursor"></div>
+  <div class="bg-glow"></div>
+
+  <nav id="main-nav">
+    <a href="index.html" class="nav-logo">chinberclart.dev</a>
+    <ul class="nav-links">
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#stack">Stack</a></li>
+      <li><a href="ai.html">AI Stance</a></li>
+    </ul>
+    <a href="contact.html" class="nav-cta-btn">Get in touch</a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-mobile-menu" id="nav-mobile-menu">
+      <a href="index.html#work" class="nav-mobile-link">Work</a>
+      <a href="index.html#about" class="nav-mobile-link">About</a>
+      <a href="index.html#stack" class="nav-mobile-link">Stack</a>
+      <a href="ai.html" class="nav-mobile-link">AI Stance</a>
+      <a href="contact.html" class="mobile-cta nav-mobile-link">Get in touch</a>
+    </div>
+  </nav>
+
+  <div style="position:relative;z-index:1;max-width:900px;margin:0 auto;padding:8rem 2rem 0;">
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:.5rem;font-size:.78rem;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s;">
+      ← Back to home
+    </a>
+  </div>
+
+  <section class="hero">
+    <p class="hero-label">Legal · Privacy Policy</p>
+    <h1>Your data.<br><span class="grad">Handled right.</span></h1>
+    <p class="hero-intro">
+      This covers <strong>chinberclart.dev</strong> and every project under it — <strong>chin web</strong>, <strong>BTFLY.SOCIAL</strong>, <strong>CLOUDLIGHT.GAMES</strong>, and the <strong>Cloudlight Global Account</strong>. No corporate language. Just what's collected, why, and what you can do about it.
+    </p>
+  </section>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <div class="toc-inner">
+      <div class="toc-label">Sections</div>
+      <a class="toc-link" href="#who">01 · Who's behind this</a>
+      <a class="toc-link" href="#what">02 · What gets collected</a>
+      <a class="toc-link" href="#why">03 · Why it's collected</a>
+      <a class="toc-link" href="#cookies">04 · Cookies &amp; advertising</a>
+      <a class="toc-link" href="#chinweb">05 · chin web specifics</a>
+      <a class="toc-link" href="#btfly">06 · BTFLY.SOCIAL specifics</a>
+      <a class="toc-link" href="#games">07 · CLOUDLIGHT.GAMES specifics</a>
+      <a class="toc-link" href="#rights">08 · Your rights</a>
+      <a class="toc-link" href="#changes">09 · When this changes</a>
+    </div>
+  </div>
+
+  <article class="article">
+
+    <!-- 01 WHO -->
+    <div class="section-divider reveal" id="who">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">01 · Who's behind this</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>One developer. All of these projects.</h2>
+      <p>chinberclart.dev is a solo independent developer operation. BTFLY.SOCIAL, CLOUDLIGHT.GAMES, chin web, and the Cloudlight Global Account are all built and run by the same person. There's no corporation, no legal entity, no third-party operator behind any of this right now.</p>
+      <p>That makes this policy straightforward: I'm not a data business. I'm a developer who needs to collect certain things to make the software work — and I want to be upfront about exactly what that is.</p>
+    </div>
+
+    <div class="use-grid reveal-children">
+      <div class="use-card">
+        <div class="use-card-header">Projects covered</div>
+        <div class="use-item"><div class="use-dot"></div><span>chinberclart.dev — this portfolio</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>chin web — Brave-powered search engine</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>BTFLY.SOCIAL — federated social platform</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>CLOUDLIGHT.GAMES — games studio</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>Cloudlight Global Account system</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>All future projects under the umbrella</span></div>
+      </div>
+      <div class="use-card">
+        <div class="use-card-header pink">This portfolio collects</div>
+        <div class="use-item"><div class="use-dot dim"></div><span>No accounts, no forms, no tracking</span></div>
+        <div class="use-item"><div class="use-dot dim"></div><span>No personal data collected here at all</span></div>
+        <div class="use-item"><div class="use-dot dim"></div><span>Hosting provider may log IPs briefly for diagnostics</span></div>
+        <div class="use-item"><div class="use-dot dim"></div><span>No analytics running as of March 2026</span></div>
+      </div>
+    </div>
+
+    <!-- 02 WHAT -->
+    <div class="section-divider reveal" id="what">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">02 · What gets collected</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>Only what's needed to work.</h2>
+      <p>The Cloudlight Global Account is the one place where real account data is collected. When you create an account, a few things are needed to make it function — and nothing beyond that.</p>
+    </div>
+
+    <div class="positions reveal-children">
+      <div class="position-item">
+        <div class="position-icon green">🪪</div>
+        <div>
+          <div class="position-title">Identity</div>
+          <div class="position-text">Your chosen username, display name, and email address. The email is used for login and account recovery only — not marketing, not sharing with anyone.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon blue">🔒</div>
+        <div>
+          <div class="position-title">Password</div>
+          <div class="position-text">Stored as a one-way hash — it cannot be reversed. I cannot see your password. Nobody can.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon amber">🕐</div>
+        <div>
+          <div class="position-title">Login metadata</div>
+          <div class="position-text">Account creation date, last login timestamp, and IP address at login. The IP is held for a limited time for security — detecting unauthorised access and enforcing bans where legally required.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon pink">💳</div>
+        <div>
+          <div class="position-title">Payments — not handled by us</div>
+          <div class="position-text">If a paid Pro tier is introduced, payment goes through a third-party processor like Stripe. No card details pass through our systems — we receive only a transaction confirmation.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal">
+      <p>"I collect the minimum needed to make the software work. Nothing more gets added without updating this policy first."</p>
+    </div>
+
+    <!-- 03 WHY -->
+    <div class="section-divider reveal" id="why">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">03 · Why it's collected</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>Four reasons. No others.</h2>
+      <p>Every piece of data collected serves one of these purposes. If it doesn't fit one of them, it shouldn't be collected.</p>
+    </div>
+
+    <div class="positions reveal-children">
+      <div class="position-item">
+        <div class="position-icon green">🔑</div>
+        <div>
+          <div class="position-title">Authentication</div>
+          <div class="position-text">Your email and password hash let you log in. That's what they're for.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon amber">🛡️</div>
+        <div>
+          <div class="position-title">Security &amp; abuse prevention</div>
+          <div class="position-text">Login metadata helps detect unauthorised access and supports the global ban system for serious violations across the federated network.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon blue">📬</div>
+        <div>
+          <div class="position-title">Account communication</div>
+          <div class="position-text">Your email may receive account-related messages — password resets, policy change notifications. No marketing emails. Ever.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon purple">🔗</div>
+        <div>
+          <div class="position-title">Platform integrity</div>
+          <div class="position-text">The Cloudlight identity layer connects your account across projects — this is what makes cross-platform features and the moderation system possible.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout reveal">
+      <div class="callout-label">✦ What we don't do</div>
+      <p>We do not build advertising profiles on Cloudlight account data. We do not sell personal data. We do not share it with third parties for any commercial purpose. We do not use your account data for anything beyond operating the service.</p>
+    </div>
+
+    <!-- 04 COOKIES -->
+    <div class="section-divider reveal" id="cookies">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">04 · Cookies &amp; advertising</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>Cookies: honest about what's there.</h2>
+      <p>Some sites under this umbrella use cookies — small text files stored in your browser. This section explains exactly which sites use them, what for, and who controls them. You are always asked before optional cookies are set.</p>
+    </div>
+
+    <div class="callout warn reveal">
+      <div class="callout-label">⚖️ Legal basis — UK PECR &amp; UK GDPR</div>
+      <p>Because chinberclart.dev operates from the UK, the relevant laws are the <strong>Privacy and Electronic Communications Regulations (PECR)</strong> and <strong>UK GDPR</strong>. Under PECR, non-essential cookies require your <strong>prior, freely given, informed consent</strong>. That consent is collected via the cookie banner on each site before any optional cookies are placed. You can withdraw consent at any time by reopening cookie settings.</p>
+    </div>
+
+    <div class="prose reveal">
+      <h2>Google Consent Mode v2.</h2>
+      <p>Both <strong>chin web</strong> and <strong>BTFLY.SOCIAL</strong> use Google AdSense to display advertisements. To comply with UK and EU privacy law, these sites implement <strong>Google Consent Mode v2</strong> — a framework that signals your consent choices directly to Google before any ad code runs.</p>
+      <p>By default, when you first visit, <em>everything is denied</em>. Google AdSense fires in a limited, non-personalised mode only. If you accept advertising cookies via the banner, Google may serve personalised ads based on your broader browsing history. If you decline, ads may still appear but they will not be targeted to you personally.</p>
+    </div>
+
+    <div class="prose reveal">
+      <h2>The full cookie list.</h2>
+    </div>
+
+    <table class="cookie-table reveal">
+      <thead>
+        <tr>
+          <th>Cookie / Storage key</th>
+          <th>Site</th>
+          <th>Purpose</th>
+          <th>Type</th>
+          <th>Set by</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>chinweb_consent_given</strong><br>chinweb_gcm</td>
+          <td>chin web</td>
+          <td>Stores whether you have made a cookie choice, and your Google Consent Mode preferences. Prevents the banner re-appearing on every visit.</td>
+          <td><span class="cookie-tag tag-essential">Essential</span></td>
+          <td>chinberclart.dev</td>
+        </tr>
+        <tr>
+          <td><strong>chinweb_history</strong></td>
+          <td>chin web</td>
+          <td>Stores your recent search queries locally so they appear in the History panel. Never leaves your browser. Only set if you enable search history in the cookie banner.</td>
+          <td><span class="cookie-tag tag-optional">Optional</span></td>
+          <td>chinberclart.dev</td>
+        </tr>
+        <tr>
+          <td><strong>Google AdSense cookies</strong><br>(e.g. __gads, __gpi, IDE)</td>
+          <td>chin web, BTFLY.SOCIAL</td>
+          <td>Used by Google to serve and measure advertisements. If you decline advertising consent, these cookies are not set and only non-personalised ads are shown.</td>
+          <td><span class="cookie-tag tag-third">Third-party</span></td>
+          <td>Google LLC</td>
+        </tr>
+        <tr>
+          <td><strong>btfly_consent_given</strong><br>btfly_gcm</td>
+          <td>BTFLY.SOCIAL</td>
+          <td>Same as chin web — stores your consent choice and Consent Mode signal to avoid showing the banner on every visit.</td>
+          <td><span class="cookie-tag tag-essential">Essential</span></td>
+          <td>chinberclart.dev</td>
+        </tr>
+        <tr>
+          <td><strong>Hosting / CDN diagnostics</strong></td>
+          <td>All sites</td>
+          <td>The hosting provider (e.g. Cloudflare) may log IP addresses and request metadata briefly for security and uptime purposes. This is infrastructure-level, outside our control, and not used for advertising.</td>
+          <td><span class="cookie-tag tag-essential">Essential</span></td>
+          <td>Hosting provider</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout reveal">
+      <div class="callout-label">🔒 How to manage or withdraw consent</div>
+      <p><strong>chin web:</strong> Click "Cookie settings" in the page footer to reopen the consent panel at any time. You can update or withdraw consent without leaving the page.</p>
+      <p><strong>BTFLY.SOCIAL:</strong> Same — "Cookie settings" link in the footer reopens the panel pre-filled with your current choices.</p>
+      <p><strong>Browser-level:</strong> You can also clear cookies or block third-party cookies directly in your browser settings. Note that clearing the consent cookie will cause the banner to reappear on your next visit.</p>
+      <p><strong>Google's own controls:</strong> You can opt out of Google's personalised advertising via <a href="https://myadcenter.google.com" target="_blank" rel="noopener" style="color:var(--accent-a);">myadcenter.google.com</a> regardless of what you've chosen here.</p>
+    </div>
+
+    <!-- 05 CHIN WEB -->
+    <div class="section-divider reveal" id="chinweb">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">05 · chin web specifics</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>Search stays in your browser.</h2>
+      <p>chin web is a search frontend that passes your queries to the <strong>Brave Search API</strong> via a Cloudflare Worker proxy. Here's exactly what happens with your data at each step:</p>
+    </div>
+
+    <div class="positions reveal-children">
+      <div class="position-item">
+        <div class="position-icon blue">🔍</div>
+        <div>
+          <div class="position-title">Your search query</div>
+          <div class="position-text">Sent from your browser to our Cloudflare Worker at api.search.chinberclart.dev, which forwards it to Brave Search. The Worker is configured to keep the API key server-side — it is never exposed to your browser. Brave Search's own <a href="https://search.brave.com/help/privacy-policy" target="_blank" rel="noopener" style="color:var(--accent-a);">privacy policy</a> applies to how they handle queries.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon green">📜</div>
+        <div>
+          <div class="position-title">Search history</div>
+          <div class="position-text">If you enable history via the cookie banner, your recent searches are stored in a cookie in your browser only. They are never sent to our servers or to Brave. You can clear them at any time from the History panel, or by clearing your browser cookies.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon amber">📢</div>
+        <div>
+          <div class="position-title">Advertising</div>
+          <div class="position-text">Google AdSense is active on chin web. If you accept advertising cookies, Google may use your broader browsing profile to personalise ads. If you decline, AdSense serves non-personalised ads only. No search query data is shared with Google by us — any Google cookie activity relates to the ad unit only.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon pink">🚫</div>
+        <div>
+          <div class="position-title">What chin web does not collect</div>
+          <div class="position-text">We do not log your search queries server-side. We do not store your IP beyond what Cloudflare retains for infrastructure purposes. We do not build any profile of your search behaviour.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 BTFLY -->
+    <div class="section-divider reveal" id="btfly">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">06 · BTFLY.SOCIAL specifics</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>Federation means data lives in multiple places.</h2>
+      <p>BTFLY is federated — posts can live on independently operated node servers run by third parties. This changes how data works in ways worth being clear about upfront.</p>
+    </div>
+
+    <div class="positions reveal-children">
+      <div class="position-item">
+        <div class="position-icon green">🌐</div>
+        <div>
+          <div class="position-title">Global identity vs. node account</div>
+          <div class="position-text">Your Cloudlight Global account is held centrally and covered by this policy. Your node-level profiles and posts are held by whoever operates that node — under their own applicable law and policy.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon amber">💡</div>
+        <div>
+          <div class="position-title">Light servers replicate — by design</div>
+          <div class="position-text">Posts on Light servers are distributed across the network and persist even after the originating server shuts down. Once replicated, content may exist on servers outside our control. Post on Light servers with this in mind.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon blue">☁️</div>
+        <div>
+          <div class="position-title">Grey and Dark servers stay local</div>
+          <div class="position-text">Grey server content lives only on that server — if it goes offline, the posts go with it. Dark servers are fully isolated and not discoverable on the global network.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon pink">📢</div>
+        <div>
+          <div class="position-title">Advertising on BTFLY.SOCIAL</div>
+          <div class="position-text">Google AdSense is currently active on the BTFLY landing page (btfly.social). The same Consent Mode v2 system applies as described in the cookies section above. When the platform launches, any in-app advertising will be described in a policy update before going live.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon purple">💾</div>
+        <div>
+          <div class="position-title">Pro cloud backup</div>
+          <div class="position-text">If you subscribe to Pro and enable cloud backup, copies of your posts are stored centrally — accessible only by you, not shared with anyone.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 GAMES -->
+    <div class="section-divider reveal" id="games">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">07 · CLOUDLIGHT.GAMES specifics</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>Games, saves, and leaderboards.</h2>
+      <p>CLOUDLIGHT.GAMES connects to the Cloudlight account for optional features. Nothing is stored without a reason, and nothing optional is stored without opting in.</p>
+    </div>
+
+    <div class="callout reveal">
+      <div class="callout-label">🎮 How game data works</div>
+      <p><strong>Cloud saves:</strong> If a game supports cloud saves and you opt in, save data is stored against your Cloudlight account — accessible only by you.</p>
+      <p><strong>Leaderboards:</strong> If a game has a public leaderboard, your display name and score will be visible to other players. You can always choose not to submit.</p>
+      <p><strong>Analytics:</strong> If gameplay analytics are collected, this is disclosed per-game. No behavioural or personal data is collected without clear disclosure first.</p>
+      <p><strong>Third-party stores:</strong> If games are distributed on Steam, itch.io, or similar platforms, those platforms' own policies apply to that distribution channel.</p>
+    </div>
+
+    <!-- 08 RIGHTS -->
+    <div class="section-divider reveal" id="rights">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">08 · Your rights</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>It's your data. Here's what you can do with it.</h2>
+      <p>Regardless of where you are, these rights apply to your Cloudlight account data. For cookie consent specifically, you can withdraw at any time via the cookie settings links on each site.</p>
+    </div>
+
+    <div class="positions reveal-children">
+      <div class="position-item">
+        <div class="position-icon green">📋</div>
+        <div>
+          <div class="position-title">Access</div>
+          <div class="position-text">Request a copy of the personal data held on your Cloudlight account at any time.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon blue">✏️</div>
+        <div>
+          <div class="position-title">Correction</div>
+          <div class="position-text">Update your account details any time via account settings, or contact us for anything you can't change directly.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon pink">🗑️</div>
+        <div>
+          <div class="position-title">Deletion</div>
+          <div class="position-text">Request full deletion of your account and data. Note: content already replicated to Light servers on BTFLY may remain on those independently operated servers outside our direct control.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon amber">📦</div>
+        <div>
+          <div class="position-title">Portability</div>
+          <div class="position-text">On request, your account data will be provided in a common machine-readable format.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon purple">🚩</div>
+        <div>
+          <div class="position-title">Objection &amp; complaints</div>
+          <div class="position-text">If you believe data is being processed incorrectly, contact us and we'll review it. If you're in the UK, you also have the right to complain to the <strong>ICO</strong> at ico.org.uk. No runaround.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal">
+      <p>"If you want your data, I'll give it to you. If you want it gone, I'll delete it. That's the deal."</p>
+    </div>
+
+    <!-- 09 CHANGES -->
+    <div class="section-divider reveal" id="changes">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">09 · When this changes</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>This policy will evolve.</h2>
+      <p>BTFLY is early-stage and advertising arrangements on all sites may change as the projects grow. The date at the bottom reflects the last change to this document.</p>
+      <p>For changes that meaningfully affect how your data is used — especially anything related to advertising, data sharing, or new third-party services — you'll be notified at your registered email address <em>before</em> the changes take effect. Continuing to use the services after that counts as acceptance.</p>
+      <p><strong>An honest policy that changes is better than a vague one that doesn't.</strong></p>
+    </div>
+
+    <!-- CLOSING -->
+    <div class="closing reveal">
+      <span class="closing-icon">🔒</span>
+      <h2>The short version.</h2>
+      <p>I collect what's needed to run the software. I don't sell it, profile you with it, or use it for anything else. Ads are shown on chin web and BTFLY — you control whether they're personalised. <strong>You can see your data, change it, or delete it.</strong> If anything changes in a way that matters, you'll hear about it first.</p>
+    </div>
+
+    <div class="last-updated reveal">
+      Effective March 2026 · <a href="index.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(240,240,245,.2);">chinberclart.dev</a>
+      &nbsp;·&nbsp; <a href="ai.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(240,240,245,.2);">AI Stance</a>
+      &nbsp;·&nbsp; <a href="chinweb.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(240,240,245,.2);">chin web</a>
+    </div>
+
+  </article>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .position-item, .use-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
+
+    const prog = document.getElementById('read-progress');
+    document.addEventListener('scroll', () => {
+      prog.style.width = Math.min(100, (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100) + '%';
+    });
+
+    const hamburger  = document.getElementById('nav-hamburger');
+    const mobileMenu = document.getElementById('nav-mobile-menu');
+    const mainNav    = document.getElementById('main-nav');
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      mainNav.classList.toggle('menu-open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+    });
+    document.querySelectorAll('.nav-mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        mainNav.classList.remove('menu-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+    document.addEventListener('click', e => {
+      if (!mainNav.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        mainNav.classList.remove('menu-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal, .reveal-children').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>

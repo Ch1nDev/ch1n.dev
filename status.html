@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Status — chinberclart.dev</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #080810;
+      --surface:    #0e0e1a;
+      --surface2:   #14141f;
+      --border:     rgba(255,255,255,0.07);
+      --border2:    rgba(255,255,255,0.12);
+      --text:       #eeeef5;
+      --muted:      rgba(238,238,245,0.4);
+      --muted2:     rgba(238,238,245,0.65);
+      --green:      #4fffb0;
+      --green-dim:  rgba(79,255,176,0.1);
+      --yellow:     #ffd97a;
+      --yellow-dim: rgba(255,217,122,0.1);
+      --red:        #ff5f7e;
+      --red-dim:    rgba(255,95,126,0.1);
+      --blue:       #82aaff;
+      --blue-dim:   rgba(130,170,255,0.1);
+      --accent:     #a9ffcb;
+      --accent-b:   #ff6db1;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; min-height: 100vh; }
+
+    /* scanlines */
+    body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.035) 2px,rgba(0,0,0,0.035) 4px); }
+
+    /* cursor */
+    #cursor { position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); width:10px; height:10px; border-radius:50%; background:var(--green); transition:width .2s,height .2s,background .2s,border .2s; mix-blend-mode:screen; }
+    #cursor.big { width:38px; height:38px; background:rgba(79,255,176,0.1); border:1.5px solid var(--green); }
+    @media(max-width:768px){ #cursor{display:none;} body{cursor:auto;} }
+
+    /* glow */
+    .bg-glow { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+    .bg-glow::before { content:''; position:absolute; top:-20%; left:-10%; width:800px; height:800px; background:radial-gradient(circle,rgba(79,255,176,0.05) 0%,transparent 65%); animation:drift 18s ease-in-out infinite alternate; }
+    .bg-glow::after  { content:''; position:absolute; bottom:-10%; right:-5%;  width:600px; height:600px; background:radial-gradient(circle,rgba(255,95,126,0.04) 0%,transparent 65%); animation:drift 24s ease-in-out infinite alternate-reverse; }
+    @keyframes drift { from{transform:translate(0,0);} to{transform:translate(50px,35px);} }
+
+    .wrap { position:relative; z-index:1; max-width:860px; margin:0 auto; padding:0 1.5rem; }
+
+    /* header */
+    header { padding:3.5rem 0 0; }
+    .header-top { display:flex; align-items:flex-start; justify-content:space-between; gap:2rem; flex-wrap:wrap; margin-bottom:2.5rem; }
+    .header-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(1.8rem,5vw,2.6rem); letter-spacing:-0.04em; line-height:1; }
+    .header-logo a { text-decoration:none; color:var(--text); }
+    .header-logo .grad { background:linear-gradient(135deg,var(--green),var(--accent-b)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .header-sub { font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--muted); margin-top:0.3rem; letter-spacing:0.04em; }
+    .header-meta { font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--muted); line-height:1.8; text-align:right; }
+    .live-dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--green); margin-right:0.4rem; animation:blink 1.8s ease-in-out infinite; vertical-align:middle; }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+    /* overall banner */
+    .overall-banner { border-radius:16px; padding:1.4rem 1.8rem; display:flex; align-items:center; gap:1.2rem; margin-bottom:2.5rem; border:1px solid; position:relative; overflow:hidden; transition:all 0.4s ease; }
+    .overall-banner::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; opacity:0.25; background:linear-gradient(90deg,transparent,currentColor,transparent); }
+    .overall-banner.all-up    { background:var(--green-dim);  border-color:rgba(79,255,176,0.2);  color:var(--green); }
+    .overall-banner.some-down { background:var(--yellow-dim); border-color:rgba(255,217,122,0.2); color:var(--yellow); }
+    .overall-banner.all-down  { background:var(--red-dim);    border-color:rgba(255,95,126,0.2);  color:var(--red); }
+    .overall-banner.checking  { background:var(--blue-dim);   border-color:rgba(130,170,255,0.15);color:var(--blue); }
+    .overall-banner.error     { background:rgba(255,95,126,0.06); border-color:rgba(255,95,126,0.2); color:var(--red); }
+    .banner-icon  { font-size:1.6rem; flex-shrink:0; }
+    .banner-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.05rem; letter-spacing:-0.02em; }
+    .banner-sub   { font-size:0.76rem; opacity:0.8; margin-top:0.15rem; font-weight:300; color:var(--muted2); }
+
+    /* refresh row */
+    .refresh-row { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:2.5rem; }
+    .refresh-info { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); }
+    .refresh-btn { font-family:'DM Mono',monospace; font-size:0.65rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; background:var(--surface); border:1px solid var(--border2); color:var(--muted2); border-radius:8px; padding:0.45rem 1rem; cursor:none; transition:border-color 0.2s,color 0.2s,background 0.2s; }
+    .refresh-btn:hover { border-color:rgba(79,255,176,0.4); color:var(--green); background:var(--green-dim); }
+    .progress-bar { width:100%; height:2px; background:var(--border); border-radius:2px; overflow:hidden; margin-top:0.5rem; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,var(--green),var(--accent-b)); transform-origin:left; transition:transform 0.1s linear; }
+
+    /* section label */
+    .section-label { font-family:'DM Mono',monospace; font-size:0.62rem; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); margin-bottom:0.8rem; display:flex; align-items:center; gap:0.6rem; }
+    .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* service list */
+    .service-list { display:flex; flex-direction:column; gap:2px; margin-bottom:3rem; border-radius:16px; overflow:hidden; border:1px solid var(--border); }
+
+    .service-row { background:var(--surface); padding:1.1rem 1.4rem; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:1.2rem; transition:background 0.15s; position:relative; }
+    .service-row:hover { background:var(--surface2); }
+    .service-row::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; border-radius:2px 0 0 2px; background:var(--muted); opacity:0.15; transition:background 0.4s,opacity 0.4s; }
+    .service-row.up::before    { background:var(--green);  opacity:0.85; }
+    .service-row.down::before  { background:var(--red);    opacity:0.85; }
+    .service-row.slow::before  { background:var(--yellow); opacity:0.85; }
+    .service-row.paused::before{ background:var(--blue);   opacity:0.6; }
+
+    /* monitor number badge */
+    .mon-num { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--muted); background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:0.2rem 0.5rem; flex-shrink:0; }
+
+    .service-left { min-width:0; }
+    .service-name-row { display:flex; align-items:center; gap:0.6rem; margin-bottom:0.2rem; flex-wrap:wrap; }
+    .service-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; color:var(--text); }
+    .service-tag { font-family:'DM Mono',monospace; font-size:0.55rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; padding:0.14rem 0.45rem; border-radius:4px; border:1px solid; flex-shrink:0; }
+    .tag-http    { color:var(--blue);   border-color:rgba(130,170,255,0.25); background:rgba(130,170,255,0.06); }
+    .tag-https   { color:var(--green);  border-color:rgba(79,255,176,0.25);  background:rgba(79,255,176,0.06); }
+    .tag-ping    { color:var(--yellow); border-color:rgba(255,217,122,0.25); background:rgba(255,217,122,0.06); }
+    .tag-keyword { color:var(--accent-b); border-color:rgba(255,109,177,0.25); background:rgba(255,109,177,0.06); }
+    .tag-port    { color:var(--muted2); border-color:var(--border2); background:transparent; }
+
+    .service-url  { font-family:'DM Mono',monospace; font-size:0.67rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .service-desc { font-size:0.73rem; font-weight:300; color:var(--muted); margin-top:0.18rem; line-height:1.4; }
+
+    .service-right { display:flex; flex-direction:column; align-items:flex-end; gap:0.35rem; flex-shrink:0; }
+
+    /* uptime bar (24 checkpoints) */
+    .uptime-bar { display:flex; gap:2px; align-items:center; }
+    .uptime-seg { width:6px; height:20px; border-radius:2px; background:var(--border2); flex-shrink:0; transition:background 0.3s; }
+    .uptime-seg.up   { background:var(--green); opacity:0.75; }
+    .uptime-seg.down { background:var(--red);   opacity:0.75; }
+    .uptime-seg.na   { background:var(--border2); }
+
+    /* status pill */
+    .status-pill { display:inline-flex; align-items:center; gap:0.4rem; font-family:'DM Mono',monospace; font-size:0.63rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.28rem 0.65rem; border-radius:100px; border:1px solid; transition:all 0.4s ease; white-space:nowrap; }
+    .status-pill .dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+    .pill-checking { color:var(--blue);   border-color:rgba(130,170,255,0.25); background:var(--blue-dim); }
+    .pill-checking .dot { background:var(--blue);   animation:blink 1s infinite; }
+    .pill-up       { color:var(--green);  border-color:rgba(79,255,176,0.25);  background:var(--green-dim); }
+    .pill-up .dot  { background:var(--green); }
+    .pill-slow     { color:var(--yellow); border-color:rgba(255,217,122,0.25); background:var(--yellow-dim); }
+    .pill-slow .dot{ background:var(--yellow); }
+    .pill-down     { color:var(--red);    border-color:rgba(255,95,126,0.25);  background:var(--red-dim); }
+    .pill-down .dot{ background:var(--red); animation:blink 0.75s infinite; }
+    .pill-paused   { color:var(--blue);   border-color:rgba(130,170,255,0.2);  background:var(--blue-dim); }
+    .pill-paused .dot { background:var(--blue); }
+
+    .response-time { font-family:'DM Mono',monospace; font-size:0.63rem; color:var(--muted); text-align:right; }
+    .response-time.fast { color:var(--green); }
+    .response-time.ok   { color:var(--muted2); }
+    .response-time.slow { color:var(--yellow); }
+
+    .uptime-pct { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--muted); text-align:right; }
+    .uptime-pct.good { color:var(--green); }
+    .uptime-pct.warn { color:var(--yellow); }
+    .uptime-pct.bad  { color:var(--red); }
+
+    /* incident log */
+    .incident-list { display:flex; flex-direction:column; gap:1px; border-radius:16px; overflow:hidden; border:1px solid var(--border); margin-bottom:3rem; }
+    .incident-item { background:var(--surface); padding:0.95rem 1.4rem; display:flex; gap:0.9rem; align-items:flex-start; transition:background 0.15s; }
+    .incident-item:hover { background:var(--surface2); }
+    .inc-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:0.3rem; }
+    .inc-dot.green  { background:var(--green); }
+    .inc-dot.yellow { background:var(--yellow); }
+    .inc-dot.red    { background:var(--red); }
+    .inc-time { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--muted); flex-shrink:0; margin-top:0.08rem; white-space:nowrap; min-width:80px; }
+    .inc-msg  { font-size:0.78rem; color:var(--muted2); line-height:1.5; flex:1; }
+    .inc-msg strong { color:var(--text); font-weight:500; }
+    .inc-duration { font-family:'DM Mono',monospace; font-size:0.58rem; color:var(--muted); flex-shrink:0; white-space:nowrap; }
+    .incident-none { padding:1.5rem 1.4rem; font-size:0.78rem; color:var(--muted); font-family:'DM Mono',monospace; }
+
+    /* setup card */
+    .setup-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.8rem 2rem; margin-bottom:3rem; position:relative; overflow:hidden; }
+    .setup-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--accent-b)); }
+    .setup-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1rem; margin-bottom:1rem; }
+    .setup-steps { display:flex; flex-direction:column; gap:0.6rem; }
+    .setup-step { display:flex; align-items:flex-start; gap:0.8rem; font-size:0.8rem; color:var(--muted2); line-height:1.55; }
+    .step-num { font-family:'DM Mono',monospace; font-size:0.6rem; font-weight:500; background:var(--surface2); border:1px solid var(--border2); border-radius:4px; padding:0.15rem 0.4rem; flex-shrink:0; color:var(--green); margin-top:0.08rem; }
+    .setup-step code { background:var(--surface2); border:1px solid var(--border2); border-radius:4px; padding:0.1rem 0.4rem; font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--accent); }
+    .setup-step a { color:var(--green); }
+
+    /* footer */
+    footer { border-top:1px solid var(--border); padding:1.5rem 0 3rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem; font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); }
+    footer a { color:inherit; text-decoration:none; transition:color 0.2s; }
+    footer a:hover { color:var(--green); }
+
+    @keyframes spin { to{transform:rotate(360deg);} }
+    .spinning { animation:spin 0.8s linear infinite; display:inline-block; }
+
+    @media(max-width:560px){
+      .service-row { grid-template-columns:1fr; }
+      .service-right { flex-direction:row; align-items:center; justify-content:flex-start; flex-wrap:wrap; gap:0.5rem; }
+      .header-meta { text-align:left; }
+      .uptime-bar { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div class="bg-glow"></div>
+
+<div class="wrap">
+
+  <header>
+    <div class="header-top">
+      <div>
+        <div class="header-logo"><a href="index.html">chinberclart<span class="grad">.dev</span></a></div>
+        <div class="header-sub">/ status &nbsp;·&nbsp; UptimeRobot</div>
+      </div>
+      <div class="header-meta">
+        <div><span class="live-dot"></span>Live via UptimeRobot API</div>
+        <div id="last-checked">Fetching…</div>
+        <div id="clock"></div>
+      </div>
+    </div>
+
+    <div class="overall-banner checking" id="overall-banner">
+      <div class="banner-icon" id="banner-icon"><span class="spinning">⟳</span></div>
+      <div>
+        <div class="banner-title" id="banner-title">Fetching monitor data…</div>
+        <div class="banner-sub"   id="banner-sub">Contacting UptimeRobot API</div>
+      </div>
+    </div>
+
+    <div class="refresh-row">
+      <div>
+        <div class="refresh-info">Auto-refresh every <strong style="color:var(--muted2)">5 min</strong> &nbsp;·&nbsp; <span id="next-check">—</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+      <button class="refresh-btn" id="refresh-btn" onclick="loadMonitors()">↺ &nbsp;Refresh now</button>
+    </div>
+  </header>
+
+  <div class="section-label">Monitors</div>
+  <div class="service-list" id="service-list">
+    <!-- populated by JS -->
+  </div>
+
+  <div class="section-label">Recent events</div>
+  <div class="incident-list" id="incident-list">
+    <div class="incident-none">Loading events…</div>
+  </div>
+
+  <!-- Setup instructions (hidden once API key is set) -->
+  <div class="setup-card" id="setup-card" style="display:none">
+    <div class="setup-title">🔧 Setup — add your UptimeRobot API key</div>
+    <div class="setup-steps">
+      <div class="setup-step">
+        <span class="step-num">01</span>
+        Sign up free at <a href="https://uptimerobot.com" target="_blank" rel="noopener">uptimerobot.com</a> and add your sites/IPs as monitors.
+      </div>
+      <div class="setup-step">
+        <span class="step-num">02</span>
+        Go to <strong>My Settings → API Settings</strong> and copy your <strong>Read-Only API Key</strong> (starts with <code>ur</code>).
+      </div>
+      <div class="setup-step">
+        <span class="step-num">03</span>
+        Because UptimeRobot's API doesn't support CORS, you need a Cloudflare Worker proxy. Deploy <code>status-worker.js</code> (included below) to a Worker and set your key as a Secret named <code>UPTIMEROBOT_KEY</code>. Point it at e.g. <code>api.status.chinberclart.dev</code>.
+      </div>
+      <div class="setup-step">
+        <span class="step-num">04</span>
+        Replace <code>https://api.chinberclart.dev</code> at the top of this file's script with your Worker URL. The setup card disappears automatically.
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>chinberclart.dev/status</span>
+    <span>
+      <a href="index.html">← Home</a>
+      &nbsp;·&nbsp; <a href="privacy.html">Privacy</a>
+      &nbsp;·&nbsp; <a href="https://uptimerobot.com" target="_blank" rel="noopener">UptimeRobot</a>
+    </span>
+  </footer>
+
+</div>
+
+<script>
+  // ─────────────────────────────────────────────────────────────────────────
+  // CONFIG — replace with your Cloudflare Worker URL
+  // The Worker proxies requests to UptimeRobot and keeps your API key hidden.
+  // See status-worker.js for the Worker code.
+  const WORKER_URL = 'https://api.status.chinberclart.dev';   // e.g. https://api.status.chinberclart.dev
+
+  // Optional: manually label your monitors (keyed by UptimeRobot monitor ID)
+  // If not set, the name from UptimeRobot is used as-is.
+  const MONITOR_META = {
+    // example:
+    // '123456789': { desc: 'Main portfolio site', tag: 'https' },
+    // '987654321': { desc: 'Brave Search Worker', tag: 'worker' },
+  };
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const REFRESH_SECONDS = 300; // 5 minutes
+
+  let countdown = REFRESH_SECONDS;
+  let countdownTimer = null;
+  let monitors = [];
+
+  // ── cursor ──
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => { cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px'; });
+  function bindHover(root = document) {
+    root.querySelectorAll('a,button,.service-row').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
+  }
+  bindHover();
+
+  // ── clock ──
+  function tick() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) + ' local';
+  }
+  setInterval(tick, 1000); tick();
+
+  // ── UptimeRobot status codes ──
+  const UR_STATUS = {
+    0: { label:'Paused',       cls:'paused', pill:'pill-paused', row:''       },
+    1: { label:'Not checked',  cls:'',       pill:'pill-checking',row:''      },
+    2: { label:'Up',           cls:'up',     pill:'pill-up',      row:'up'    },
+    8: { label:'Seems down',   cls:'slow',   pill:'pill-slow',    row:'slow'  },
+    9: { label:'Down',         cls:'down',   pill:'pill-down',    row:'down'  },
+  };
+
+  const UR_TYPE = { 1:'http', 2:'https', 3:'port', 4:'ping', 5:'https', 99:'keyword' };
+
+  // ── load monitors ──
+  async function loadMonitors() {
+    setBanner('checking', '<span class="spinning">⟳</span>', 'Fetching monitor data…', 'Contacting UptimeRobot API');
+    document.getElementById('service-list').innerHTML = skeletonRows(4);
+
+    if (WORKER_URL === 'https://api.chinberclart.dev') {
+      showSetupNeeded();
+      return;
+    }
+
+    document.getElementById('setup-card').style.display = 'none';
+
+    try {
+      const res = await fetch(WORKER_URL + '?action=getMonitors');
+      const rawText = await res.text();
+      let data;
+      try { data = JSON.parse(rawText); } catch(e) { throw new Error('Non-JSON response: ' + rawText.slice(0,200)); }
+      if (!res.ok) throw new Error('Worker returned ' + res.status + ': ' + (data.error?.message || rawText.slice(0,120)));
+      if (data.stat !== 'ok') throw new Error(data.error?.message || 'API error — stat: ' + data.stat);
+
+      monitors = data.monitors || [];
+      renderMonitors(monitors);
+      loadAlerts(monitors.map(m => m.id).join('-'));
+      updateBannerFromMonitors(monitors);
+      document.getElementById('last-checked').textContent =
+        'Updated ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    } catch(e) {
+      showError(e.message);
+    }
+
+    resetCountdown();
+  }
+
+  // ── load alert log ──
+  async function loadAlerts(ids) {
+    if (WORKER_URL === 'https://api.chinberclart.dev') return;
+    try {
+      const res = await fetch(`${WORKER_URL}?action=getAlerts&monitors=${ids}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.stat !== 'ok') return;
+      renderAlerts(data.monitors || []);
+    } catch {}
+  }
+
+  // ── render monitors ──
+  function renderMonitors(mons) {
+    const list = document.getElementById('service-list');
+    if (!mons.length) {
+      list.innerHTML = `<div style="padding:2rem 1.4rem;font-size:0.8rem;color:var(--muted);font-family:'DM Mono',monospace;">No monitors found. Add some in your UptimeRobot dashboard.</div>`;
+      return;
+    }
+
+    list.innerHTML = mons.map(m => {
+      const st    = UR_STATUS[m.status] || UR_STATUS[1];
+      const type  = UR_TYPE[m.type] || 'http';
+      const meta  = MONITOR_META[m.id] || {};
+      const desc  = meta.desc || m.friendly_name !== m.url ? '' : '';
+      const tag   = meta.tag || type;
+      const tagCls = ['http','https','ping','keyword','port'].includes(tag) ? 'tag-'+tag : 'tag-http';
+      const rtMs  = m.average_response_time ? parseInt(m.average_response_time) : null;
+      const rtCls = !rtMs ? '' : rtMs < 300 ? 'fast' : rtMs < 800 ? 'ok' : 'slow';
+      const rtTxt = rtMs ? rtMs + 'ms avg' : '—';
+      const pct   = m.custom_uptime_ratio ? parseFloat(m.custom_uptime_ratio).toFixed(2) : null;
+      const pctCls = !pct ? '' : pct >= 99.9 ? 'good' : pct >= 95 ? 'warn' : 'bad';
+
+      // 24-segment uptime bar from custom_uptime_ranges (daily for 24 days, or blank)
+      const ranges = (m.custom_uptime_ranges || '').split('-').filter(Boolean).slice(0,24);
+      const segs = Array.from({length:24}, (_,i) => {
+        const v = parseFloat(ranges[i]);
+        if (isNaN(v)) return 'na';
+        return v >= 99 ? 'up' : v === 0 ? 'down' : 'up'; // >0 treat as up for simplicity
+      });
+
+      return `<div class="service-row ${st.row}" id="mon-${m.id}">
+        <div class="mon-num">#${m.id}</div>
+        <div class="service-left">
+          <div class="service-name-row">
+            <span class="service-name">${esc(m.friendly_name)}</span>
+            <span class="service-tag ${tagCls}">${tag}</span>
+          </div>
+          <div class="service-url">${esc(m.url || '')}</div>
+          ${desc ? `<div class="service-desc">${esc(desc)}</div>` : ''}
+        </div>
+        <div class="service-right">
+          <span class="status-pill ${st.pill}">
+            <span class="dot"></span>${st.label}
+          </span>
+          <div class="uptime-bar" title="Last 24 days availability">
+            ${segs.map(s=>`<div class="uptime-seg ${s}" title="${s}"></div>`).join('')}
+          </div>
+          <span class="response-time ${rtCls}">${rtTxt}</span>
+          ${pct ? `<span class="uptime-pct ${pctCls}">${pct}% uptime</span>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    bindHover(list);
+  }
+
+  // ── render alert log ──
+  function renderAlerts(alertMons) {
+    const list = document.getElementById('incident-list');
+    const events = [];
+
+    alertMons.forEach(m => {
+      (m.logs || []).forEach(log => {
+        // type 1 = down, 2 = up, 98 = started, 99 = paused
+        const typeMap = { 1:'down', 2:'up', 98:'up', 99:'paused' };
+        const colorMap = { 1:'red', 2:'green', 98:'green', 99:'yellow' };
+        const labelMap = {
+          1: `<strong>${esc(m.friendly_name)}</strong> went <span style="color:var(--red)">down</span>`,
+          2: `<strong>${esc(m.friendly_name)}</strong> came back <span style="color:var(--green)">up</span>`,
+          98:`<strong>${esc(m.friendly_name)}</strong> started monitoring`,
+          99:`<strong>${esc(m.friendly_name)}</strong> was paused`,
+        };
+        if (!labelMap[log.type]) return;
+        events.push({
+          ts:       log.datetime * 1000,
+          color:    colorMap[log.type] || 'yellow',
+          msg:      labelMap[log.type],
+          duration: log.duration || null,
+          monName:  m.friendly_name,
+        });
+      });
+    });
+
+    events.sort((a,b) => b.ts - a.ts);
+
+    if (!events.length) {
+      list.innerHTML = '<div class="incident-none">No events in the log window.</div>';
+      return;
+    }
+
+    list.innerHTML = events.slice(0,30).map(ev => {
+      const d = new Date(ev.ts);
+      const timeStr = d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) + ' ' +
+                      d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      const dur = ev.duration ? fmtDuration(ev.duration) : '';
+      return `<div class="incident-item">
+        <div class="inc-dot ${ev.color}"></div>
+        <div class="inc-time">${timeStr}</div>
+        <div class="inc-msg">${ev.msg}</div>
+        ${dur ? `<div class="inc-duration">${dur}</div>` : ''}
+      </div>`;
+    }).join('');
+  }
+
+  function fmtDuration(secs) {
+    if (secs < 60)   return secs + 's';
+    if (secs < 3600) return Math.floor(secs/60) + 'm ' + (secs%60) + 's';
+    return Math.floor(secs/3600) + 'h ' + Math.floor((secs%3600)/60) + 'm';
+  }
+
+  // ── banner ──
+  function updateBannerFromMonitors(mons) {
+    const total   = mons.length;
+    const up      = mons.filter(m => m.status === 2).length;
+    const down    = mons.filter(m => m.status === 9).length;
+    const slow    = mons.filter(m => m.status === 8).length;
+    const paused  = mons.filter(m => m.status === 0).length;
+
+    if (down === 0 && slow === 0) {
+      setBanner('all-up', '✓',
+        `All ${up} monitor${up!==1?'s':''} operational`,
+        paused ? `${paused} paused · ${up} up` : `Everything responding normally`);
+    } else if (down + slow === total - paused) {
+      setBanner('all-down', '✕', 'Major outage', `${down} down · ${slow} degraded`);
+    } else {
+      const bits = [down?`${down} down`:null, slow?`${slow} degraded`:null].filter(Boolean).join(', ');
+      setBanner('some-down', '!', 'Partial outage', `${bits} · ${up} of ${total} up`);
+    }
+  }
+
+  function setBanner(cls, icon, title, sub) {
+    document.getElementById('overall-banner').className = 'overall-banner ' + cls;
+    document.getElementById('banner-icon').innerHTML  = icon;
+    document.getElementById('banner-title').textContent = title;
+    document.getElementById('banner-sub').textContent   = sub;
+  }
+
+  function showError(msg) {
+    setBanner('error', '⚠', 'Could not load monitor data', msg);
+    document.getElementById('service-list').innerHTML =
+      `<div style="padding:1.5rem 1.4rem;font-size:0.78rem;color:var(--muted);font-family:'DM Mono',monospace;">${esc(msg)}</div>`;
+    document.getElementById('incident-list').innerHTML =
+      '<div class="incident-none">No data available.</div>';
+  }
+
+  function showSetupNeeded() {
+    setBanner('checking', '🔧', 'Setup required', 'Add your Worker URL to get started — see instructions below');
+    document.getElementById('service-list').innerHTML =
+      `<div style="padding:1.5rem 1.4rem;font-size:0.78rem;color:var(--muted);font-family:'DM Mono',monospace;">Set <code style="background:var(--surface2);padding:0.1rem 0.3rem;border-radius:3px;color:var(--accent);">WORKER_URL</code> at the top of the script to load your monitors.</div>`;
+    document.getElementById('incident-list').innerHTML =
+      '<div class="incident-none">No data until Worker is configured.</div>';
+  }
+
+  function skeletonRows(n) {
+    return Array.from({length:n}, (_,i) => `
+      <div class="service-row" style="opacity:${0.6 - i*0.1}">
+        <div class="mon-num" style="background:var(--surface2);color:transparent;border-radius:4px;">000</div>
+        <div class="service-left">
+          <div style="height:13px;width:${120+i*30}px;background:var(--surface2);border-radius:4px;margin-bottom:6px;"></div>
+          <div style="height:10px;width:${180+i*20}px;background:var(--surface2);border-radius:4px;opacity:0.5;"></div>
+        </div>
+        <div class="service-right">
+          <div style="height:22px;width:80px;background:var(--surface2);border-radius:100px;"></div>
+          <div style="height:10px;width:50px;background:var(--surface2);border-radius:4px;margin-top:4px;opacity:0.4;"></div>
+        </div>
+      </div>`).join('');
+  }
+
+  // ── countdown ──
+  function resetCountdown() {
+    countdown = REFRESH_SECONDS;
+    clearInterval(countdownTimer);
+    countdownTimer = setInterval(() => {
+      countdown--;
+      const frac = countdown / REFRESH_SECONDS;
+      document.getElementById('progress-fill').style.transform = `scaleX(${frac})`;
+      const m = Math.floor(countdown/60), s = countdown%60;
+      document.getElementById('next-check').textContent =
+        `next refresh in ${m > 0 ? m+'m ' : ''}${s}s`;
+      if (countdown <= 0) { clearInterval(countdownTimer); loadMonitors(); }
+    }, 1000);
+  }
+
+  function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  loadMonitors();
+</script>
+</body>
+</html>

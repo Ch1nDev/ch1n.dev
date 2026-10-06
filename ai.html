@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="google-adsense-account" content="ca-pub-2746279162471306">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2746279162471306"
+     crossorigin="anonymous"></script>
+  <title>chinberclart.dev - My Stance on AI</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0a0a0f;
+      --surface:  #111118;
+      --surface2: #18181f;
+      --border:   rgba(255,255,255,0.07);
+      --accent-a: #a9ffcb;
+      --accent-b: #ff6db1;
+      --text:     #f0f0f5;
+      --muted:    rgba(240,240,245,0.45);
+      --muted2:   rgba(240,240,245,0.7);
+      --radius:   20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── GRADIENT UTIL ── */
+    .grad {
+      background: linear-gradient(135deg, var(--accent-a) 0%, var(--accent-b) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── CURSOR ── */
+    .cursor {
+      position: fixed;
+      width: 12px; height: 12px;
+      background: var(--accent-a);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+    }
+    .cursor.big {
+      width: 44px; height: 44px;
+      background: rgba(169,255,203,0.12);
+      border: 1.5px solid var(--accent-a);
+    }
+    @media (max-width: 768px) {
+      .cursor { display: none; }
+      body { cursor: auto; }
+    }
+
+    /* ── GLOW BG ── */
+    .bg-glow {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .bg-glow::before {
+      content: '';
+      position: absolute; top: -20%; left: 15%;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(169,255,203,0.07) 0%, transparent 70%);
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+    .bg-glow::after {
+      content: '';
+      position: absolute; bottom: 10%; right: 5%;
+      width: 550px; height: 550px;
+      background: radial-gradient(circle, rgba(255,109,177,0.06) 0%, transparent 70%);
+      animation: drift 20s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes drift {
+      from { transform: translate(0, 0); }
+      to   { transform: translate(35px, 28px); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 1.2rem; left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0.9rem 0.75rem 1.5rem;
+      background: rgba(17,17,24,0.82);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      width: min(880px, calc(100% - 2rem));
+      gap: 2rem;
+      transition: border-radius 0.3s;
+    }
+    nav.menu-open { border-radius: 20px; }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 0.95rem;
+      color: var(--text); text-decoration: none;
+      white-space: nowrap; letter-spacing: -0.01em;
+    }
+    .nav-links { display: flex; gap: 0.2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--muted); text-decoration: none;
+      padding: 0.45rem 0.9rem; border-radius: 100px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface2); }
+    .nav-links a.active { color: var(--text); background: var(--surface2); }
+    .nav-cta-btn {
+      background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+      color: #0a0a0f;
+      padding: 0.55rem 1.3rem; border-radius: 100px;
+      font-size: 0.78rem; font-weight: 600;
+      text-decoration: none; transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .nav-cta-btn:hover { opacity: 0.85; }
+
+    /* ── HAMBURGER BUTTON ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 38px; height: 38px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      cursor: pointer;
+      gap: 5px;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .nav-hamburger:hover { background: rgba(169,255,203,0.08); }
+    .nav-hamburger span {
+      display: block;
+      width: 16px; height: 1.5px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+      transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── MOBILE DROPDOWN MENU ── */
+    .nav-mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 0.25rem;
+      width: 100%;
+      padding-top: 0;
+      border-top: 1px solid transparent;
+      margin-top: 0;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.3s ease, padding-top 0.3s ease, border-color 0.3s ease;
+    }
+    .nav-mobile-menu.open {
+      max-height: 300px;
+      opacity: 1;
+      padding-top: 0.75rem;
+      border-top-color: var(--border);
+      margin-top: 0.75rem;
+    }
+    .nav-mobile-menu a {
+      font-size: 0.88rem; font-weight: 500;
+      color: var(--muted); text-decoration: none;
+      padding: 0.65rem 0.75rem;
+      border-radius: 12px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-mobile-menu a:hover { color: var(--text); background: var(--surface2); }
+    .nav-mobile-menu a.active-mobile { color: var(--text); background: var(--surface2); }
+    .nav-mobile-menu .mobile-cta {
+      margin-top: 0.5rem;
+      background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+      color: #0a0a0f;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 100px;
+      padding: 0.75rem;
+    }
+    .nav-mobile-menu .mobile-cta:hover { opacity: 0.88; background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); color: #0a0a0f; }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-wrap: wrap;
+        gap: 0;
+        padding: 0.75rem 0.9rem 0.75rem 1.3rem;
+        align-items: center;
+      }
+      .nav-links { display: none; }
+      .nav-cta-btn { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-mobile-menu { display: flex; }
+      .nav-logo { flex: 1; }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 75vh;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 7rem 2rem 5rem;
+      max-width: 900px; margin: 0 auto;
+    }
+    .hero-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.6rem;
+      animation: fadeUp 0.5s ease both;
+    }
+    .hero-label::before {
+      content: '';
+      display: block; width: 24px; height: 1.5px;
+      background: linear-gradient(90deg, var(--accent-a), var(--accent-b));
+      border-radius: 2px;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.5s 0.08s ease both;
+    }
+    .hero-intro {
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      font-weight: 300; line-height: 1.75;
+      color: var(--muted2);
+      max-width: 56ch;
+      animation: fadeUp 0.5s 0.16s ease both;
+    }
+    .hero-intro strong { color: var(--text); font-weight: 500; }
+
+    /* ── PROGRESS LINE ── */
+    .read-progress {
+      position: fixed; top: 0; left: 0;
+      height: 2px; z-index: 500;
+      background: linear-gradient(90deg, var(--accent-a), var(--accent-b));
+      width: 0%; transition: width 0.1s linear;
+    }
+
+    /* ── ARTICLE LAYOUT ── */
+    .article {
+      position: relative; z-index: 1;
+      max-width: 740px; margin: 0 auto;
+      padding: 0 2rem 8rem;
+    }
+
+    .section-divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 5rem 0 3rem;
+    }
+    .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+    .section-divider-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); white-space: nowrap;
+    }
+
+    .prose h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      letter-spacing: -0.02em; line-height: 1.1;
+      margin-bottom: 1.3rem; color: var(--text);
+    }
+    .prose p {
+      font-size: 1.05rem; font-weight: 300;
+      line-height: 1.85; color: var(--muted2);
+      margin-bottom: 1.5rem;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose p strong { color: var(--text); font-weight: 500; }
+    .prose p em { font-style: italic; color: var(--text); }
+
+    .pull-quote {
+      border-left: 3px solid;
+      border-image: linear-gradient(180deg, var(--accent-a), var(--accent-b)) 1;
+      padding: 1.5rem 0 1.5rem 2rem;
+      margin: 3rem 0;
+    }
+    .pull-quote p {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.1rem, 2vw, 1.45rem) !important;
+      font-weight: 600 !important;
+      color: var(--text) !important;
+      line-height: 1.45 !important;
+      margin-bottom: 0 !important;
+      letter-spacing: -0.01em;
+    }
+
+    .callout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.8rem 2rem;
+      margin: 2.5rem 0;
+      position: relative; overflow: hidden;
+    }
+    .callout::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-a), var(--accent-b));
+    }
+    .callout-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent-a); margin-bottom: 0.8rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .callout p {
+      font-size: 0.92rem !important;
+      margin-bottom: 0 !important;
+      color: var(--muted2) !important;
+    }
+    .callout p strong { color: var(--text) !important; }
+
+    .positions {
+      display: flex; flex-direction: column;
+      gap: 1px; margin: 2.5rem 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .position-item {
+      background: var(--surface);
+      padding: 1.4rem 1.8rem;
+      display: flex; gap: 1.2rem;
+      align-items: flex-start;
+      transition: background 0.2s;
+    }
+    .position-item:hover { background: var(--surface2); }
+    .position-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem;
+    }
+    .position-icon.green { background: rgba(169,255,203,0.1); border: 1px solid rgba(169,255,203,0.2); }
+    .position-icon.pink  { background: rgba(255,109,177,0.1); border: 1px solid rgba(255,109,177,0.2); }
+    .position-icon.amber { background: rgba(255,185,100,0.1); border: 1px solid rgba(255,185,100,0.2); }
+    .position-icon.blue  { background: rgba(130,170,255,0.1); border: 1px solid rgba(130,170,255,0.2); }
+    .position-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 0.95rem;
+      margin-bottom: 0.35rem; color: var(--text);
+    }
+    .position-text {
+      font-size: 0.82rem; font-weight: 300;
+      line-height: 1.65; color: var(--muted2);
+    }
+
+    .use-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem; margin: 2rem 0;
+    }
+    .use-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .use-card-header {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      margin-bottom: 1.1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .use-card.yes .use-card-header { color: var(--accent-a); }
+    .use-card.no  .use-card-header { color: var(--accent-b); }
+    .use-item {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      font-size: 0.78rem; font-weight: 300;
+      line-height: 1.55; color: var(--muted2);
+      margin-bottom: 0.7rem;
+    }
+    .use-item:last-child { margin-bottom: 0; }
+    .use-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      flex-shrink: 0; margin-top: 0.45rem;
+    }
+    .use-card.yes .use-dot { background: var(--accent-a); }
+    .use-card.no  .use-dot { background: var(--accent-b); }
+
+    .closing {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 3rem; margin-top: 4rem;
+      position: relative; overflow: hidden;
+      text-align: center;
+    }
+    .closing::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(169,255,203,0.06), transparent 60%);
+      pointer-events: none;
+    }
+    .closing-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
+    .closing h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      letter-spacing: -0.02em; margin-bottom: 1.2rem;
+    }
+    .closing p {
+      font-size: 0.95rem; font-weight: 300;
+      line-height: 1.8; color: var(--muted2);
+      max-width: 50ch; margin: 0 auto;
+    }
+    .closing p strong { color: var(--text); font-weight: 500; }
+
+    .last-updated {
+      text-align: center; margin-top: 3rem;
+      font-size: 0.68rem; color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .reveal-children > * {
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .reveal-children.visible > *:nth-child(1) { opacity:1;transform:none;transition-delay:.05s; }
+    .reveal-children.visible > *:nth-child(2) { opacity:1;transform:none;transition-delay:.12s; }
+    .reveal-children.visible > *:nth-child(3) { opacity:1;transform:none;transition-delay:.19s; }
+    .reveal-children.visible > *:nth-child(4) { opacity:1;transform:none;transition-delay:.26s; }
+    .reveal-children.visible > *:nth-child(5) { opacity:1;transform:none;transition-delay:.33s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .use-grid { grid-template-columns: 1fr; }
+      .closing { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="bg-glow"></div>
+  <div class="read-progress" id="read-progress"></div>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="index.html" class="nav-logo">chinberclart.dev</a>
+
+    <!-- Desktop links -->
+    <ul class="nav-links">
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#stack">Stack</a></li>
+      <li><a href="ai.html" class="active">AI Stance</a></li>
+    </ul>
+
+    <a href="contact.html" class="nav-cta-btn">Get in touch</a>
+
+    <!-- Hamburger (mobile only) -->
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Mobile dropdown -->
+    <div class="nav-mobile-menu" id="nav-mobile-menu">
+      <a href="index.html#work" class="nav-mobile-link">Work</a>
+      <a href="index.html#about" class="nav-mobile-link">About</a>
+      <a href="index.html#stack" class="nav-mobile-link">Stack</a>
+      <a href="ai.html" class="nav-mobile-link active-mobile">AI Stance</a>
+      <a href="contact.html" class="mobile-cta nav-mobile-link">Get in touch</a>
+    </div>
+  </nav>
+
+  <!-- BACK LINK -->
+  <div style="position:relative;z-index:1;max-width:900px;margin:0 auto;padding:8rem 2rem 0;">
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:.5rem;font-size:.78rem;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s;">
+      ← Back to home
+    </a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-label">Essay · My Stance on AI</p>
+    <h1>I use AI.<br><span class="grad">Here's how.</span></h1>
+    <p class="hero-intro">
+      There's a lot of noise about AI right now — both from people who think it's the end of creativity, and people who treat it like a magic button. <strong>I don't agree with either.</strong> This page is my honest position: what I use it for, what I don't, and why.
+    </p>
+  </section>
+
+  <!-- ARTICLE -->
+  <article class="article">
+
+    <div class="section-divider reveal">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">01 · The honest truth</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>Yes, I use AI tools.</h2>
+      <p>I'm not going to pretend otherwise. AI assistants are part of my workflow and have been for a while now. I use them for specific tasks where they genuinely save time or help me think through problems faster — not as a replacement for my own judgment, taste, or craft.</p>
+      <p>I'm a solo developer building <strong>three interconnected games</strong>, a personal portfolio, and various side projects — all at the same time. AI lets me move faster on the stuff that would otherwise slow everything to a crawl. That's a practical choice, not a philosophical one.</p>
+    </div>
+
+    <div class="pull-quote reveal">
+      <p>"Using a tool well is a skill. Using it blindly is a problem. I try to stay firmly on the right side of that line."</p>
+    </div>
+
+    <div class="section-divider reveal">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">02 · Where I draw the line</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>What it does — and doesn't — touch.</h2>
+      <p>There's a clear split in my mind between things that benefit from AI assistance and things that would be <em>actively harmed</em> by it. The lore for the Cloudlight universe, the design decisions behind each game, the voice of this website — those came from me, not a model. AI didn't invent the classified storytelling in Shockwave. It didn't decide that Explorer should feel like the Wastes seen from ground level. That's the stuff that matters.</p>
+      <p>What AI does help with is the scaffolding — the boilerplate, the first draft of a function I'll then rewrite, the quick lookup, the rubber-duck debugging session at midnight when I'd otherwise be stuck. It saves me time on things I know how to do, not things I don't know how to think about.</p>
+    </div>
+
+    <div class="use-grid reveal-children">
+      <div class="use-card yes">
+        <div class="use-card-header">✓ Where I use it</div>
+        <div class="use-item"><div class="use-dot"></div><span>Boilerplate code and repetitive structure</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>Debugging — explaining errors, checking logic</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>First drafts of UI I'll redesign myself</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>Researching things I'd otherwise look up manually</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>Thinking through architecture before I build it</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>Speeding up tasks I already understand well</span></div>
+      </div>
+      <div class="use-card no">
+        <div class="use-card-header">✗ Where I don't</div>
+        <div class="use-item"><div class="use-dot"></div><span>Game lore, world-building, or creative direction</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>Design decisions — layout, colour, feel</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>Anything that needs to sound like me</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>Publishing AI output without reading it myself</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>Skipping the learning because AI "got it"</span></div>
+        <div class="use-item"><div class="use-dot"></div><span>Replacing thinking with prompting</span></div>
+      </div>
+    </div>
+
+    <div class="section-divider reveal">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">03 · What I actually believe</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>My positions, plainly.</h2>
+      <p>I've thought about this enough to have actual views. Here's where I land:</p>
+    </div>
+
+    <div class="positions reveal-children">
+      <div class="position-item">
+        <div class="position-icon green">🧠</div>
+        <div class="position-body">
+          <div class="position-title">AI is a tool, not a collaborator</div>
+          <div class="position-text">I don't think AI has taste, judgment, or intent. It predicts tokens. The creative decisions are still mine — the tool just removes friction on the execution side of things I've already figured out.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon pink">🎨</div>
+        <div class="position-body">
+          <div class="position-title">Generated art in commercial products is a hard no for me</div>
+          <div class="position-text">For my games, everything visual will be human-made. I care about the craft behind the art, the intent behind each frame. AI-generated assets in a commercial release feel like a shortcut that costs too much — not financially, but in terms of what the work actually is.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon amber">⚡</div>
+        <div class="position-body">
+          <div class="position-title">Speed matters when you're building alone</div>
+          <div class="position-text">Being a solo developer means every hour counts twice. AI lets me move at a pace that would otherwise be impossible — and that means I can ship things I care about instead of being buried in boilerplate forever. That's a pragmatic choice I stand by.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon blue">📖</div>
+        <div class="position-body">
+          <div class="position-title">Disclosure matters</div>
+          <div class="position-text">If AI substantially contributed to something I put out into the world, I'll say so. I think the pretence that everything is purely hand-crafted when it isn't is what's actually corrosive — not the use of AI itself. Honesty is non-negotiable.</div>
+        </div>
+      </div>
+      <div class="position-item">
+        <div class="position-icon green">🔍</div>
+        <div class="position-body">
+          <div class="position-title">You still have to understand what it gives you</div>
+          <div class="position-text">I never ship AI output I don't understand. If I ask for a function and can't explain what it does line by line, it doesn't go in. AI is a starting point, not an ending one. Blind trust in generated code is how you build things that quietly break.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider reveal">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">04 · On creativity specifically</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>The creative stuff stays mine.</h2>
+      <p>The thing I'm most protective of is the creative vision behind Cloudlight. The three-game shared universe, the asymmetric storytelling in Shockwave, the specific feeling I want Explorer to have when you first walk into the Wastes — none of that came from a prompt. That's years of thinking, obsessing, scrapping, and rebuilding ideas in my head before a single line of code was written.</p>
+      <p>AI didn't write this website's copy. It didn't write the lore Bible. It didn't decide what Rexux feels like at speed or why the golden age has to feel genuinely happy before everything falls apart. Those decisions matter too much to outsource.</p>
+    </div>
+
+    <div class="pull-quote reveal">
+      <p>"The vision is mine. The world is mine. The story is mine. AI helps me build faster — it doesn't get to decide what I'm building."</p>
+    </div>
+
+    <div class="callout reveal">
+      <div class="callout-label">✦ Worth saying clearly</div>
+      <p>I think the anxiety around AI in creative fields is often pointed at the wrong thing. The issue isn't the tool — it's whether the person using it still has something genuine to say. I do. That's what I'm focused on.</p>
+    </div>
+
+    <div class="section-divider reveal">
+      <div class="section-divider-line"></div>
+      <span class="section-divider-label">05 · Where I'm watching</span>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="prose reveal">
+      <h2>Things I'm still figuring out.</h2>
+      <p>I'm not settled on everything. The training data question is unresolved — I think it matters that models are trained on human creative work, and I haven't landed on a fully comfortable position about what that means for how I use them. I'm watching how that conversation develops.</p>
+      <p>I'm also aware that my view could change. What AI can do is moving fast, and what feels like a reasonable use of the technology today might look different in two years. <strong>I'd rather update my position than pretend it was always obvious.</strong></p>
+      <p>This page will change as my thinking does. That's the point of writing it down.</p>
+    </div>
+
+    <div class="closing reveal">
+      <span class="closing-icon">✦</span>
+      <h2>The short version.</h2>
+      <p>I use AI where it makes me faster without making my work worse. I don't use it where it would make my work less mine. <strong>The vision, the story, the aesthetic decisions — those stay human.</strong> The boilerplate can have some help.</p>
+    </div>
+
+    <div class="last-updated reveal">Last updated March 2026 · <a href="index.html" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(240,240,245,.2)">chinberclart.dev</a></div>
+
+  </article>
+
+  <script>
+    // Custom cursor (desktop only)
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .position-item, .use-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
+
+    // Read progress bar
+    const prog = document.getElementById('read-progress');
+    document.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.body.scrollHeight - window.innerHeight;
+      prog.style.width = Math.min(100, (scrolled / total) * 100) + '%';
+    });
+
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('nav-hamburger');
+    const mobileMenu = document.getElementById('nav-mobile-menu');
+    const mainNav = document.getElementById('main-nav');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      mainNav.classList.toggle('menu-open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen);
+    });
+
+    document.querySelectorAll('.nav-mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        mainNav.classList.remove('menu-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    document.addEventListener('click', e => {
+      if (!mainNav.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        mainNav.classList.remove('menu-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Scroll reveal
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal, .reveal-children').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
